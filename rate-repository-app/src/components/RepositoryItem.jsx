@@ -1,5 +1,7 @@
+// @ts-nocheck
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Image, Text, StyleSheet } from 'react-native';
+import theme from '../theme';
 
 const formatCount = (count) => {
   if (count >= 1000) {
@@ -8,57 +10,93 @@ const formatCount = (count) => {
   return count.toString();
 };
 
+const RepositoryItemHeader = ({ item }) => (
+  <View style={styles.headerContainer}>
+    <Image source={{ uri: item.ownerAvatarUrl }} style={styles.avatar} />
+    <View style={styles.headerInfo}>
+      <Text style={styles.fullName}>{item.fullName}</Text>
+      <Text style={styles.description}>{item.description}</Text>
+      <View style={styles.languageContainer}>
+        <Text style={styles.language}>{item.language}</Text>
+      </View>
+    </View>
+  </View>
+);
+
+const StatItem = ({ label, value }) => (
+  <View style={styles.statItem}>
+    <Text style={styles.statValue}>{formatCount(value)}</Text>
+    <Text style={styles.statLabel}>{label}</Text>
+  </View>
+);
+
+const RepositoryStats = ({ item }) => (
+  <View style={styles.stats}>
+    <StatItem label="Stars" value={item.stargazersCount} />
+    <StatItem label="Forks" value={item.forksCount} />
+    <StatItem label="Reviews" value={item.reviewCount} />
+    <StatItem label="Rating" value={item.ratingAverage} />
+  </View>
+);
+
 const RepositoryItem = ({ item }) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri: item.ownerAvatarUrl }} style={styles.avatar} />
-      <View style={styles.infoContainer}>
-        <Text style={styles.fullName}>{item.fullName}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-        <Text style={styles.language}>{item.language}</Text>
-      <View style={styles.stats}>
-        <Text>Forks: {formatCount(item.forksCount)}</Text>
-        <Text>Stars: {formatCount(item.stargazersCount)}</Text>
-        <Text>Rating: {item.ratingAverage}</Text>
-        <Text>Reviews: {formatCount(item.reviewCount)}</Text>
-      </View>
-      </View>
+      <RepositoryItemHeader item={item} />
+      <RepositoryStats item={item} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    padding: theme.padding.large,
+    backgroundColor: theme.colors.white,
+  },
+  headerContainer: {
     flexDirection: 'row',
-    padding: 10,
+    marginBottom: theme.margins.medium,
   },
   avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 5,
-    marginRight: 10,
+    width: 45,
+    height: 45,
+    borderRadius: theme.roundness,
   },
-  infoContainer: {
+  headerInfo: {
     flex: 1,
+    marginLeft: theme.margins.medium,
   },
   fullName: {
-    fontWeight: 'bold',
+    fontSize: theme.fontSizes.subheading,
+    fontWeight: theme.fontWeights.bold,
   },
   description: {
-    color: 'grey',
-    marginVertical: 5,
+    color: theme.colors.textSecondary,
+    marginTop: theme.margins.small,
+  },
+  languageContainer: {
+    marginTop: theme.margins.small,
   },
   language: {
-    backgroundColor: '#0366d6',
-    color: 'white',
-    padding: 4,
-    borderRadius: 3,
+    backgroundColor: theme.colors.primary,
+    color: theme.colors.white,
+    padding: theme.padding.small,
+    borderRadius: theme.roundness,
     alignSelf: 'flex-start',
   },
   stats: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 10,
+    justifyContent: 'space-around',
+    marginTop: theme.margins.medium,
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statValue: {
+    fontWeight: theme.fontWeights.bold,
+  },
+  statLabel: {
+    color: theme.colors.textSecondary,
   },
 });
 
