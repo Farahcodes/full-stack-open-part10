@@ -6,10 +6,7 @@ import RepositoryItem from './RepositoryItem';
 const styles = StyleSheet.create({
   separator: {
     height: 10,
-  },
-    contentContainer: {
-    paddingTop: 30,
-  },
+  }
 });
 
 const repositories = [
@@ -68,7 +65,6 @@ const RepositoryList = () => {
       ItemSeparatorComponent={ItemSeparator}
       renderItem={({ item }) => <RepositoryItem item={item} />} // Render each repository
       keyExtractor={(item) => item.id}
-      contentContainerStyle={styles.contentContainer}
 
     />
   );
