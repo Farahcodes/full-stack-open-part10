@@ -1,6 +1,7 @@
 // @ts-nocheck
 import React from 'react';
-import { View, TextInput, Pressable, StyleSheet,Text } from 'react-native';
+import { View, TextInput, Pressable, StyleSheet, Text } from 'react-native';
+import { useNavigate } from 'react-router-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -38,7 +39,10 @@ const styles = StyleSheet.create({
       });
 
 const SignIn = () => {
-    const [signIn, result] = useSignIn();
+  const [signIn, result] = useSignIn();
+  const navigate = useNavigate();
+
+
     const validationSchema = Yup.object().shape({
     username: Yup.string()
       .required('Username is required'),
@@ -51,6 +55,8 @@ const SignIn = () => {
 
     try {
       const { data } = await signIn({ username, password });
+      // redirect to repository list
+      navigate('/');
       console.log(data);
     } catch (e) {
       console.log(e);
