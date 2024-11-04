@@ -1,9 +1,13 @@
+// @ts-nocheck
 import React from 'react';
-import { View, StyleSheet, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, Text, Pressable } from 'react-native';
 import Constants from 'expo-constants';
 import { Link } from 'react-router-native';
+import { useNavigate } from 'react-router-native';
 
-
+// hooks
+import { useMe } from '../hooks/useMe';
+import useSignOut from '../hooks/useSignOut';
 // theme
 import theme from '../theme';
 
@@ -26,18 +30,40 @@ const styles = StyleSheet.create({
   },
 });
 
-const AppBarTab = ({ title, to }) => (
-  <Link to={to} style={styles.tab}>
-    <Text style={styles.tabText}>{title}</Text>
-  </Link>
-);
+const AppBarTab = ({ title, to = '', onPress = null }) => {
+  if (onPress) {
+    return (
+      <Pressable onPress={onPress} style={styles.tab}>
+        <Text style={styles.tabText}>{title}</Text>
+      </Pressable>
+    );
+  }
+
+  return (
+    <Link to={to} style={styles.tab}>
+      <Text style={styles.tabText}>{title}</Text>
+    </Link>
+  );
+};
 
 const AppBar = () => {
+  const { me } = useMe();
+  const signOut = useSignOut();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
   return (
     <View style={styles.container}>
       <ScrollView horizontal style={styles.scrollView}>
         <AppBarTab title="Repositories" to="/" />
-        <AppBarTab title="Sign in" to="/signin" />
+        {me ? (
+          <AppBarTab title="Sign out" onPress={handleSignOut} />
+        ) : (
+          <AppBarTab title="Sign in" to="/signin" />
+        )}
       </ScrollView>
     </View>
   );
