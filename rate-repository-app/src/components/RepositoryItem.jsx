@@ -41,7 +41,7 @@ const RepositoryStats = ({ item }) => (
 
 const RepositoryItem = ({ item }) => {
   return (
-    <View style={styles.container}>
+    <View testID="repositoryItem" style={styles.container}>
       <RepositoryItemHeader item={item} />
       <RepositoryStats item={item} />
     </View>
