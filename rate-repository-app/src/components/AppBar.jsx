@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
     backgroundColor: theme.colors.appBarBackground,
-    flexDirection:"row"
+    flexDirection: "row"
   },
   tab: {
     paddingHorizontal: 15,
@@ -55,12 +55,16 @@ const AppBar = () => {
     await signOut();
     navigate('/');
   };
+
   return (
     <View style={styles.container}>
       <ScrollView horizontal style={styles.scrollView}>
         <AppBarTab title="Repositories" to="/" />
         {me ? (
-          <AppBarTab title="Sign out" onPress={handleSignOut} />
+          <>
+            <AppBarTab title="Create a review" to="/create-review" />
+            <AppBarTab title="Sign out" onPress={handleSignOut} />
+          </>
         ) : (
           <AppBarTab title="Sign in" to="/signin" />
         )}
