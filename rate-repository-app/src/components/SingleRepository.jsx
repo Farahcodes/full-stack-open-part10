@@ -1,15 +1,18 @@
 import React from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 import { useParams } from 'react-router-native';
 import { useQuery } from '@apollo/client';
 import { GET_REPOSITORY } from '../graphql/queries';
-import RepositoryItem from './RepositoryItem';
-import { View, StyleSheet } from 'react-native';
+import RepositoryInfo from './RepositoryInfo';
+import ReviewItem from './ReviewItem';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  separator: {
+    height: 10,
   },
 });
+
+const ItemSeparator = () => <View style={styles.separator} />;
 
 const SingleRepository = () => {
   const { id } = useParams();
@@ -21,12 +24,17 @@ const SingleRepository = () => {
   if (loading) return null;
   if (error) return null;
 
-  const repository = data?.repository;
+  const repository = data.repository;
+  const reviews = repository.reviews.edges;
 
   return (
-    <View style={styles.container}>
-      <RepositoryItem item={repository} showGitHubLink={true} />
-    </View>
+    <FlatList
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ node }) => node.id}
+      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ItemSeparatorComponent={ItemSeparator}
+    />
   );
 };
 
