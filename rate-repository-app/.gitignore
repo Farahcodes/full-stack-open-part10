@@ -37,3 +37,8 @@ yarn-error.*
 build*
 # env
 .env
+# ios
+ios/
+
+# android
+android/
