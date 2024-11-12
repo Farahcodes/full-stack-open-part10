@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 import RepositoryItem from './RepositoryItem';
-import SortingPicker from './SortingPicker';
+import RepositoryListHeader from './RepositoryListHeader';
 
 const styles = StyleSheet.create({
   separator: {
@@ -12,15 +12,26 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({
+const RepositoryListContainer = ({
   repositories,
   sortBy,
   setSortBy,
+  searchQuery,
+  setSearchQuery,
   onRepositoryPress
 }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
     : [];
+
+  const renderHeader = () => (
+    <RepositoryListHeader
+      sortBy={sortBy}
+      setSortBy={setSortBy}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+    />
+  );
 
   return (
     <FlatList
@@ -33,12 +44,9 @@ export const RepositoryListContainer = ({
         />
       )}
       keyExtractor={item => item.id}
-      ListHeaderComponent={() => (
-        <SortingPicker
-          selectedValue={sortBy}
-          onValueChange={setSortBy}
-        />
-      )}
+      ListHeaderComponent={renderHeader}
     />
   );
 };
+
+export default RepositoryListContainer;
