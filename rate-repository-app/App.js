@@ -5,6 +5,7 @@ import { NativeRouter } from 'react-router-native';
 import { ApolloProvider } from '@apollo/client';
 import Constants from 'expo-constants';
 import { registerRootComponent } from 'expo';
+import { Provider as PaperProvider } from 'react-native-paper';
 
 // Main component
 import Main from './src/components/Main';
@@ -22,9 +23,11 @@ export default function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <AuthStorageContext.Provider value={authStorage}>
-        <NativeRouter>
-          <Main />
-        </NativeRouter>
+        <PaperProvider>
+          <NativeRouter>
+            <Main />
+          </NativeRouter>
+        </PaperProvider>
       </AuthStorageContext.Provider>
       <StatusBar style="auto" />
     </ApolloProvider>

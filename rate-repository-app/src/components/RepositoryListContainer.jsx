@@ -1,32 +1,44 @@
+// @ts-nocheck
 import React from 'react';
-import { FlatList, View, StyleSheet, Pressable } from 'react-native';
+import { FlatList, View, StyleSheet } from 'react-native';
 import RepositoryItem from './RepositoryItem';
+import SortingPicker from './SortingPicker';
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
-  }
+  },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({ repositories, onRepositoryPress }) => {
+export const RepositoryListContainer = ({
+  repositories,
+  sortBy,
+  setSortBy,
+  onRepositoryPress
+}) => {
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
     : [];
-
-  const renderItem = ({ item }) => (
-    <Pressable onPress={() => onRepositoryPress(item.id)}>
-      <RepositoryItem item={item} showGitHubLink={false} />
-    </Pressable>
-  );
 
   return (
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <RepositoryItem
+          item={item}
+          onPress={() => onRepositoryPress(item.id)}
+        />
+      )}
+      keyExtractor={item => item.id}
+      ListHeaderComponent={() => (
+        <SortingPicker
+          selectedValue={sortBy}
+          onValueChange={setSortBy}
+        />
+      )}
     />
   );
 };
