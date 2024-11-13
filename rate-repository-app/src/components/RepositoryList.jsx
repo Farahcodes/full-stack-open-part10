@@ -10,24 +10,27 @@ const RepositoryList = () => {
   const [sortBy, setSortBy] = useState('latest');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500);
-
-  const { repositories, loading } = useRepositories(sortBy, debouncedSearchQuery);
   const navigate = useNavigate();
 
-  const onRepositoryPress = (id) => {
-    navigate(`/repository/${id}`);
-  };
+  const { repositories, fetchMore } = useRepositories({
+    first: 8,
+    orderBy: sortBy === 'latest' ? 'CREATED_AT' : 'RATING_AVERAGE',
+    orderDirection: sortBy === 'lowest' ? 'ASC' : 'DESC',
+    searchKeyword: debouncedSearchQuery,
+  });
 
-  if (loading) return null;
+  const onEndReach = () => {
+    fetchMore();
+  };
 
   return (
     <RepositoryListContainer
       repositories={repositories}
+      onEndReach={onEndReach}
       sortBy={sortBy}
       setSortBy={setSortBy}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
-      onRepositoryPress={onRepositoryPress}
     />
   );
 };
