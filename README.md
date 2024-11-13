@@ -28,9 +28,13 @@ This repository contains the front end for a React Native application for rating
 - Formik (form handling)
 - Yup (form validation)
 
-## Getting Started
-
-[Installation and setup instructions to be added]
 
 ## Screenshots
-[to be added]
+![Repository List](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.15.00.png)
+![Search Repositories](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.15.25.png)
+![Sort Repositories](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.15.36.png)
+![Create a review](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.15.45.png)
+![My Reviews](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.15.52.png)
+![Repository Details](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.16.06.png)
+![Sign In](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.29.14.png)
+![Sign Up](./rate-repository-app/screenshots/Simulator%20Screenshot%20-%20iPhone%2015%20Pro%20-%202024-11-13%20at%2023.29.26.png)
