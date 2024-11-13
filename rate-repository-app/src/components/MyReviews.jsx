@@ -1,8 +1,9 @@
 // @ts-nocheck
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
-import { useQuery } from '@apollo/client';
+import { FlatList, StyleSheet, View, Alert } from 'react-native';
+import { useQuery, useMutation } from '@apollo/client';
 import { ME } from '../graphql/queries';
+import { DELETE_REVIEW } from '../graphql/mutations';
 import Text from './Text';
 import theme from '../theme';
 import { format } from 'date-fns';
@@ -54,17 +55,43 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 15,
   },
   button: {
     flex: 1,
     marginHorizontal: 5,
   },
+  viewButton: {
+    backgroundColor: theme.colors.primary,
+  },
+  deleteButton: {
+    backgroundColor: theme.colors.error,
+  },
 });
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-const ReviewItem = ({ review, navigate }) => {
-  const { repository, rating, createdAt, text } = review.node;
+const ReviewItem = ({ review, navigate, onDelete }) => {
+  const { repository, rating, createdAt, text, id } = review.node;
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Delete review',
+      'Are you sure you want to delete this review?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => onDelete(id),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: false }
+    );
+  };
 
   return (
     <View style={styles.reviewContainer}>
@@ -83,10 +110,17 @@ const ReviewItem = ({ review, navigate }) => {
       <View style={styles.buttonContainer}>
         <Button
           mode="contained"
-          style={styles.button}
+          style={[styles.button, styles.viewButton]}
           onPress={() => navigate(`/repository/${repository.id}`)}
         >
           View repository
+        </Button>
+        <Button
+          mode="contained"
+          style={[styles.button, styles.deleteButton]}
+          onPress={handleDelete}
+        >
+          Delete review
         </Button>
       </View>
     </View>
@@ -95,9 +129,15 @@ const ReviewItem = ({ review, navigate }) => {
 
 const MyReviews = () => {
   const navigate = useNavigate();
-  const { data, loading, error } = useQuery(ME, {
+  const { data, loading, error, refetch } = useQuery(ME, {
     variables: { includeReviews: true },
     fetchPolicy: 'cache-and-network',
+  });
+
+  const [deleteReview] = useMutation(DELETE_REVIEW, {
+    onError: (error) => {
+      console.log('Error deleting review:', error);
+    },
   });
 
   if (loading) return null;
@@ -106,12 +146,17 @@ const MyReviews = () => {
 
   const reviews = data.me.reviews.edges;
 
+  const handleDelete = (id) => {
+    deleteReview({ variables: { id } });
+    refetch();
+  };
+
   return (
     <FlatList
       data={reviews}
       ItemSeparatorComponent={ItemSeparator}
       renderItem={({ item }) => (
-        <ReviewItem review={item} navigate={navigate} />
+        <ReviewItem review={item} navigate={navigate} onDelete={handleDelete} />
       )}
       keyExtractor={({ node }) => node.id}
     />
