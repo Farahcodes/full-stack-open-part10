@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View, Pressable } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import RepositoryListHeader from './RepositoryListHeader';
 
@@ -19,6 +19,7 @@ export const RepositoryListContainer = ({
   setSortBy,
   searchQuery,
   setSearchQuery,
+  onRepositoryPress
 }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
@@ -37,7 +38,11 @@ export const RepositoryListContainer = ({
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem item={item} />}
+      renderItem={({ item }) => (
+        <Pressable onPress={() => onRepositoryPress(item.id)}>
+          <RepositoryItem item={item} />
+        </Pressable>
+      )}
       keyExtractor={item => item.id}
       ListHeaderComponent={renderHeader}
       onEndReached={onEndReach}

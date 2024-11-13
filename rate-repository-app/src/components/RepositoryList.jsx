@@ -23,6 +23,10 @@ const RepositoryList = () => {
     fetchMore();
   };
 
+  const onRepositoryPress = (id) => {
+    navigate(`/repository/${id}`);
+  };
+
   return (
     <RepositoryListContainer
       repositories={repositories}
@@ -31,6 +35,7 @@ const RepositoryList = () => {
       setSortBy={setSortBy}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
+      onRepositoryPress={onRepositoryPress}
     />
   );
 };

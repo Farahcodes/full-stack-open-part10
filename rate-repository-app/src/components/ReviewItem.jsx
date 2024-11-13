@@ -1,15 +1,18 @@
 // @ts-nocheck
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import Text from './Text';
 import theme from '../theme';
+import { format } from 'date-fns';
 
 const styles = StyleSheet.create({
   container: {
-    padding: theme.padding.large,
     backgroundColor: 'white',
+    padding: 15,
   },
-  reviewContainer: {
+  reviewHeader: {
     flexDirection: 'row',
+    marginBottom: 15,
   },
   ratingContainer: {
     width: 45,
@@ -19,46 +22,43 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: theme.margins.medium,
+    marginRight: 15,
   },
   ratingText: {
     color: theme.colors.primary,
     fontSize: theme.fontSizes.subheading,
     fontWeight: theme.fontWeights.bold,
   },
-  contentContainer: {
+  reviewInfo: {
     flex: 1,
   },
   username: {
     fontSize: theme.fontSizes.subheading,
     fontWeight: theme.fontWeights.bold,
+    marginBottom: 5,
   },
   date: {
     color: theme.colors.textSecondary,
-    marginTop: theme.margins.small,
-  },
-  text: {
-    marginTop: theme.margins.small,
+    marginBottom: 5,
   },
 });
 
 const ReviewItem = ({ review }) => {
-  const { text, rating, createdAt, user } = review.node;
-
-  const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
-  };
+  const { node } = review;
+  const { rating, createdAt, text, user } = node;
 
   return (
     <View style={styles.container}>
-      <View style={styles.reviewContainer}>
+      <View style={styles.reviewHeader}>
         <View style={styles.ratingContainer}>
           <Text style={styles.ratingText}>{rating}</Text>
         </View>
-        <View style={styles.contentContainer}>
+        <View style={styles.reviewInfo}>
           <Text style={styles.username}>{user.username}</Text>
-          <Text style={styles.date}>{formatDate(createdAt)}</Text>
-          <Text style={styles.text}>{text}</Text>
+          <Text style={styles.date}>
+            {format(new Date(createdAt), 'dd.MM.yyyy')}
+          </Text>
+          <Text>{text}</Text>
         </View>
       </View>
     </View>
